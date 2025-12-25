@@ -161,35 +161,42 @@ export default function ProfilePage() {
     setUploadingFile(type);
     setError(null);
     setUploadSuccess(null);
+    console.log("Starting upload for:", type);
 
     try {
       const formDataUpload = new FormData();
       formDataUpload.append("file", file);
       formDataUpload.append("type", type);
 
+      console.log("Sending to /api/upload...");
       const res = await fetch("/api/upload", {
         method: "POST",
         body: formDataUpload,
       });
 
+      console.log("Response status:", res.status);
       const data = await res.json();
+      console.log("Response data:", data);
 
       if (res.ok && data.url) {
+        console.log("Upload successful, URL:", data.url);
         const fieldName = type === "resume" ? "resumeUrl" : type === "coverLetter" ? "coverLetterUrl" : "transcriptUrl";
         setFormData((prev) => ({ ...prev, [fieldName]: data.url }));
         // Auto-save after upload
         const saveResult = await handleSaveAfterUpload(type, data.url);
+        console.log("Save result:", saveResult);
         if (saveResult) {
           setUploadSuccess(`${type} uploaded and saved!`);
         } else {
           setError("File uploaded but failed to save to profile");
         }
       } else {
+        console.log("Upload failed:", data.error);
         setError(data.error || "Failed to upload file");
       }
     } catch (err) {
+      console.error("Upload exception:", err);
       setError("Network error during upload");
-      console.error("Upload error:", err);
     }
 
     setUploadingFile(null);
