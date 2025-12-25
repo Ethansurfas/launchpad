@@ -67,6 +67,7 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [uploadingFile, setUploadingFile] = useState<string | null>(null);
+  const [uploadSuccess, setUploadSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
@@ -159,6 +160,7 @@ export default function ProfilePage() {
 
     setUploadingFile(type);
     setError(null);
+    setUploadSuccess(null);
 
     try {
       const formDataUpload = new FormData();
@@ -177,7 +179,9 @@ export default function ProfilePage() {
         setFormData((prev) => ({ ...prev, [fieldName]: data.url }));
         // Auto-save after upload
         const saveResult = await handleSaveAfterUpload(type, data.url);
-        if (!saveResult) {
+        if (saveResult) {
+          setUploadSuccess(`${type} uploaded and saved!`);
+        } else {
           setError("File uploaded but failed to save to profile");
         }
       } else {
@@ -251,6 +255,12 @@ export default function ProfilePage() {
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
           {error}
+        </div>
+      )}
+
+      {uploadSuccess && (
+        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+          {uploadSuccess}
         </div>
       )}
 

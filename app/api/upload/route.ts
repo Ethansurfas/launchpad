@@ -55,8 +55,8 @@ export async function POST(request: Request) {
       });
 
     if (error) {
-      console.error("Upload error:", error);
-      return NextResponse.json({ error: "Failed to upload file" }, { status: 500 });
+      console.error("Supabase upload error:", error);
+      return NextResponse.json({ error: `Upload failed: ${error.message}` }, { status: 500 });
     }
 
     // Get public URL
@@ -67,6 +67,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ url: urlData.publicUrl });
   } catch (error) {
     console.error("Upload error:", error);
-    return NextResponse.json({ error: "Failed to upload file" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: `Upload failed: ${message}` }, { status: 500 });
   }
 }
