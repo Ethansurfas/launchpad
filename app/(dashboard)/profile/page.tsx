@@ -215,7 +215,7 @@ export default function ProfilePage() {
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   />
                 </div>
                 <div>
@@ -224,7 +224,7 @@ export default function ProfilePage() {
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => setFormData((prev) => ({ ...prev, phone: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                     placeholder="(555) 555-5555"
                   />
                 </div>
@@ -236,7 +236,7 @@ export default function ProfilePage() {
                     type="text"
                     value={formData.location}
                     onChange={(e) => setFormData((prev) => ({ ...prev, location: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                     placeholder="City, State"
                   />
                 </div>
@@ -245,7 +245,7 @@ export default function ProfilePage() {
                   <select
                     value={formData.workAuth}
                     onChange={(e) => setFormData((prev) => ({ ...prev, workAuth: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   >
                     <option value="">Select...</option>
                     <option value="US_CITIZEN">U.S. Citizen</option>
@@ -263,7 +263,7 @@ export default function ProfilePage() {
                   value={formData.bio}
                   onChange={(e) => setFormData((prev) => ({ ...prev, bio: e.target.value }))}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   placeholder="Tell employers about yourself..."
                 />
               </div>
@@ -299,7 +299,7 @@ export default function ProfilePage() {
                   type="text"
                   value={formData.university}
                   onChange={(e) => setFormData((prev) => ({ ...prev, university: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -309,7 +309,7 @@ export default function ProfilePage() {
                     type="text"
                     value={formData.major}
                     onChange={(e) => setFormData((prev) => ({ ...prev, major: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   />
                 </div>
                 <div>
@@ -318,7 +318,7 @@ export default function ProfilePage() {
                     type="text"
                     value={formData.minor}
                     onChange={(e) => setFormData((prev) => ({ ...prev, minor: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   />
                 </div>
               </div>
@@ -329,7 +329,7 @@ export default function ProfilePage() {
                     type="number"
                     value={formData.gradYear}
                     onChange={(e) => setFormData((prev) => ({ ...prev, gradYear: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                     placeholder="2025"
                   />
                 </div>
@@ -340,7 +340,7 @@ export default function ProfilePage() {
                     step="0.01"
                     value={formData.gpa}
                     onChange={(e) => setFormData((prev) => ({ ...prev, gpa: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                     placeholder="3.50"
                   />
                 </div>
@@ -353,7 +353,7 @@ export default function ProfilePage() {
                     value={newCoursework}
                     onChange={(e) => setNewCoursework(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addItem("coursework", newCoursework, setNewCoursework))}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                     placeholder="Add course"
                   />
                   <Button type="button" variant="secondary" onClick={() => addItem("coursework", newCoursework, setNewCoursework)}>Add</Button>
@@ -372,7 +372,7 @@ export default function ProfilePage() {
                     value={newHonor}
                     onChange={(e) => setNewHonor(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addItem("honors", newHonor, setNewHonor))}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                     placeholder="Add honor or award"
                   />
                   <Button type="button" variant="secondary" onClick={() => addItem("honors", newHonor, setNewHonor)}>Add</Button>
@@ -429,7 +429,7 @@ export default function ProfilePage() {
                   value={newSkill}
                   onChange={(e) => setNewSkill(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addItem("skills", newSkill, setNewSkill))}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   placeholder="Add a skill"
                 />
                 <Button type="button" variant="secondary" onClick={() => addItem("skills", newSkill, setNewSkill)}>Add</Button>
@@ -537,7 +537,7 @@ export default function ProfilePage() {
                   type="url"
                   value={formData.linkedIn}
                   onChange={(e) => setFormData((prev) => ({ ...prev, linkedIn: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   placeholder="https://linkedin.com/in/..."
                 />
               </div>
@@ -547,7 +547,7 @@ export default function ProfilePage() {
                   type="url"
                   value={formData.github}
                   onChange={(e) => setFormData((prev) => ({ ...prev, github: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   placeholder="https://github.com/..."
                 />
               </div>
@@ -557,7 +557,7 @@ export default function ProfilePage() {
                   type="url"
                   value={formData.portfolio}
                   onChange={(e) => setFormData((prev) => ({ ...prev, portfolio: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   placeholder="https://yoursite.com"
                 />
               </div>
