@@ -29,7 +29,6 @@ export async function createDailyRoom(roomName: string): Promise<DailyRoom> {
     body: JSON.stringify({
       name: roomName,
       properties: {
-        enable_recording: "cloud", // Enable cloud recording
         enable_chat: true,
         enable_screenshare: true,
         start_video_off: false,
