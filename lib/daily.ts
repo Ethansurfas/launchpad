@@ -1,6 +1,10 @@
 const DAILY_API_KEY = process.env.DAILY_API_KEY;
 const DAILY_API_URL = "https://api.daily.co/v1";
 
+if (!DAILY_API_KEY) {
+  console.warn("Warning: DAILY_API_KEY is not set");
+}
+
 interface DailyRoom {
   id: string;
   name: string;
@@ -12,6 +16,10 @@ interface DailyRoom {
 }
 
 export async function createDailyRoom(roomName: string): Promise<DailyRoom> {
+  if (!DAILY_API_KEY) {
+    throw new Error("DAILY_API_KEY is not configured");
+  }
+
   const response = await fetch(`${DAILY_API_URL}/rooms`, {
     method: "POST",
     headers: {
@@ -33,7 +41,8 @@ export async function createDailyRoom(roomName: string): Promise<DailyRoom> {
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.info || "Failed to create Daily room");
+    console.error("Daily.co API error:", error);
+    throw new Error(error.info || `Failed to create Daily room: ${response.status}`);
   }
 
   return response.json();

@@ -98,8 +98,9 @@ export async function POST(
       });
     } catch (dailyError) {
       console.error("Daily.co error:", dailyError);
+      const message = dailyError instanceof Error ? dailyError.message : "Unknown error";
       return NextResponse.json(
-        { error: "Failed to create video room" },
+        { error: `Failed to create video room: ${message}` },
         { status: 500 }
       );
     }
