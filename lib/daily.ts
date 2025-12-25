@@ -29,6 +29,7 @@ export async function createDailyRoom(roomName: string): Promise<DailyRoom> {
     body: JSON.stringify({
       name: roomName,
       properties: {
+        enable_recording: "cloud", // $0.003/min - requires card on Daily.co
         enable_chat: true,
         enable_screenshare: true,
         start_video_off: false,
