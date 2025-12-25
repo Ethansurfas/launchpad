@@ -158,23 +158,54 @@ export default function ProfilePage() {
     if (!file) return;
 
     setUploadingFile(type);
+    setError(null);
 
-    const formDataUpload = new FormData();
-    formDataUpload.append("file", file);
-    formDataUpload.append("type", type);
+    try {
+      const formDataUpload = new FormData();
+      formDataUpload.append("file", file);
+      formDataUpload.append("type", type);
 
-    const res = await fetch("/api/upload", {
-      method: "POST",
-      body: formDataUpload,
-    });
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formDataUpload,
+      });
 
-    if (res.ok) {
-      const { url } = await res.json();
-      const fieldName = type === "resume" ? "resumeUrl" : type === "coverLetter" ? "coverLetterUrl" : "transcriptUrl";
-      setFormData((prev) => ({ ...prev, [fieldName]: url }));
+      const data = await res.json();
+
+      if (res.ok) {
+        const fieldName = type === "resume" ? "resumeUrl" : type === "coverLetter" ? "coverLetterUrl" : "transcriptUrl";
+        setFormData((prev) => ({ ...prev, [fieldName]: data.url }));
+        // Auto-save after upload
+        await handleSaveAfterUpload(type, data.url);
+      } else {
+        setError(data.error || "Failed to upload file");
+      }
+    } catch (err) {
+      setError("Network error during upload");
+      console.error("Upload error:", err);
     }
 
     setUploadingFile(null);
+  }
+
+  async function handleSaveAfterUpload(type: string, url: string) {
+    const fieldName = type === "resume" ? "resumeUrl" : type === "coverLetter" ? "coverLetterUrl" : "transcriptUrl";
+    const saveData = { ...formData, [fieldName]: url };
+
+    try {
+      const res = await fetch("/api/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(saveData),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setProfile(data);
+      }
+    } catch (err) {
+      console.error("Auto-save error:", err);
+    }
   }
 
   function addItem(field: "skills" | "coursework" | "honors", value: string, setter: (v: string) => void) {
