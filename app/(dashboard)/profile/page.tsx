@@ -67,6 +67,7 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [uploadingFile, setUploadingFile] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -130,15 +131,24 @@ export default function ProfilePage() {
 
   async function handleSave() {
     setSaving(true);
-    const res = await fetch("/api/profile", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-    if (res.ok) {
+    setError(null);
+    try {
+      const res = await fetch("/api/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
       const data = await res.json();
-      setProfile(data);
-      setActiveSection(null);
+      if (res.ok) {
+        setProfile(data);
+        setActiveSection(null);
+      } else {
+        setError(data.error || "Failed to save profile");
+        console.error("Save error:", data);
+      }
+    } catch (err) {
+      setError("Network error - please try again");
+      console.error("Save error:", err);
     }
     setSaving(false);
   }
@@ -196,6 +206,12 @@ export default function ProfilePage() {
           <p className="text-gray-600">Complete your profile to stand out to employers</p>
         </div>
       </div>
+
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+          {error}
+        </div>
+      )}
 
       {/* Basic Info */}
       <Card>
