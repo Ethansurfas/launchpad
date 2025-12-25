@@ -1,19 +1,67 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+
+const DRAFT_KEY = "job-draft";
+
+interface JobDraft {
+  title: string;
+  description: string;
+  responsibilities: string;
+  requirements: string;
+  location: string;
+  type: string;
+  salary: string;
+  deadline: string;
+}
 
 export default function NewJobPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [needsCompany, setNeedsCompany] = useState(false);
+  const [draft, setDraft] = useState<JobDraft | null>(null);
+
+  // Load draft from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem(DRAFT_KEY);
+    if (saved) {
+      try {
+        setDraft(JSON.parse(saved));
+      } catch {
+        localStorage.removeItem(DRAFT_KEY);
+      }
+    }
+  }, []);
+
+  function saveDraft(formData: FormData) {
+    const data: JobDraft = {
+      title: formData.get("title") as string || "",
+      description: formData.get("description") as string || "",
+      responsibilities: formData.get("responsibilities") as string || "",
+      requirements: formData.get("requirements") as string || "",
+      location: formData.get("location") as string || "",
+      type: formData.get("type") as string || "INTERNSHIP",
+      salary: formData.get("salary") as string || "",
+      deadline: formData.get("deadline") as string || "",
+    };
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+  }
+
+  function clearDraft() {
+    localStorage.removeItem(DRAFT_KEY);
+    setDraft(null);
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setNeedsCompany(false);
 
     const formData = new FormData(e.currentTarget);
     const data = {
@@ -34,10 +82,18 @@ export default function NewJobPage() {
     });
 
     if (res.ok) {
+      clearDraft();
       router.push("/employer/jobs");
     } else {
       const result = await res.json();
-      setError(result.error || "Failed to create job");
+      if (result.error === "No company associated") {
+        // Save draft and show company setup prompt
+        saveDraft(formData);
+        setNeedsCompany(true);
+        setError("You need to set up your company before posting jobs.");
+      } else {
+        setError(result.error || "Failed to create job");
+      }
     }
 
     setLoading(false);
@@ -50,6 +106,18 @@ export default function NewJobPage() {
         <p className="text-gray-600 mt-1">Create a job listing to find candidates</p>
       </div>
 
+      {draft && (
+        <div className="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-lg mb-6 flex justify-between items-center">
+          <span>Draft restored from your previous session.</span>
+          <button
+            onClick={clearDraft}
+            className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+          >
+            Clear draft
+          </button>
+        </div>
+      )}
+
       <Card>
         <CardHeader>
           <h2 className="font-semibold text-gray-900">Job Details</h2>
@@ -59,6 +127,18 @@ export default function NewJobPage() {
             {error && (
               <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">
                 {error}
+                {needsCompany && (
+                  <div className="mt-3">
+                    <Link href="/employer/onboarding">
+                      <Button type="button" size="sm">
+                        Set Up Company
+                      </Button>
+                    </Link>
+                    <p className="mt-2 text-xs text-red-500">
+                      Your job details have been saved and will be restored when you return.
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 
@@ -70,6 +150,7 @@ export default function NewJobPage() {
                 name="title"
                 type="text"
                 required
+                defaultValue={draft?.title || ""}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                 placeholder="e.g., Software Engineering Intern"
               />
@@ -83,6 +164,7 @@ export default function NewJobPage() {
                 name="description"
                 required
                 rows={4}
+                defaultValue={draft?.description || ""}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                 placeholder="Brief overview of the role..."
               />
@@ -95,6 +177,7 @@ export default function NewJobPage() {
               <textarea
                 name="responsibilities"
                 rows={5}
+                defaultValue={draft?.responsibilities || ""}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                 placeholder="- Swab the deck daily&#10;- Stand watch for rival vessels&#10;- Assist with treasure acquisition..."
               />
@@ -107,6 +190,7 @@ export default function NewJobPage() {
               <textarea
                 name="requirements"
                 rows={5}
+                defaultValue={draft?.requirements || ""}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                 placeholder="- Strong swimming skills&#10;- Comfortable with parrots&#10;- 2+ years of sailing experience..."
               />
@@ -121,6 +205,7 @@ export default function NewJobPage() {
                   name="location"
                   type="text"
                   required
+                  defaultValue={draft?.location || ""}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   placeholder="e.g., San Francisco, CA or Remote"
                 />
@@ -132,6 +217,7 @@ export default function NewJobPage() {
                 <select
                   name="type"
                   required
+                  defaultValue={draft?.type || "INTERNSHIP"}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                 >
                   <option value="INTERNSHIP">Internship</option>
@@ -150,6 +236,7 @@ export default function NewJobPage() {
                 <input
                   name="salary"
                   type="text"
+                  defaultValue={draft?.salary || ""}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   placeholder="e.g., $25/hr or $50k-70k"
                 />
@@ -161,6 +248,7 @@ export default function NewJobPage() {
                 <input
                   name="deadline"
                   type="date"
+                  defaultValue={draft?.deadline || ""}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                 />
               </div>
