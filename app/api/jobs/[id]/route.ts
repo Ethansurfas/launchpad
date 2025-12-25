@@ -85,6 +85,9 @@ export async function PUT(
         salary: data.salary,
         deadline: data.deadline ? new Date(data.deadline) : null,
         isActive: data.isActive,
+        requireResume: data.requireResume,
+        requireCoverLetter: data.requireCoverLetter,
+        requireTranscript: data.requireTranscript,
       },
     });
 

@@ -17,6 +17,9 @@ interface JobDraft {
   type: string;
   salary: string;
   deadline: string;
+  requireResume: boolean;
+  requireCoverLetter: boolean;
+  requireTranscript: boolean;
 }
 
 export default function NewJobPage() {
@@ -48,6 +51,9 @@ export default function NewJobPage() {
       type: formData.get("type") as string || "INTERNSHIP",
       salary: formData.get("salary") as string || "",
       deadline: formData.get("deadline") as string || "",
+      requireResume: formData.get("requireResume") === "on",
+      requireCoverLetter: formData.get("requireCoverLetter") === "on",
+      requireTranscript: formData.get("requireTranscript") === "on",
     };
     localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
   }
@@ -73,6 +79,9 @@ export default function NewJobPage() {
       type: formData.get("type"),
       salary: formData.get("salary") || null,
       deadline: formData.get("deadline") || null,
+      requireResume: formData.get("requireResume") === "on",
+      requireCoverLetter: formData.get("requireCoverLetter") === "on",
+      requireTranscript: formData.get("requireTranscript") === "on",
     };
 
     const res = await fetch("/api/jobs", {
@@ -251,6 +260,44 @@ export default function NewJobPage() {
                   defaultValue={draft?.deadline || ""}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                 />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Required Documents
+              </label>
+              <p className="text-xs text-gray-500 mb-3">
+                Select which documents applicants must submit
+              </p>
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="requireResume"
+                    defaultChecked={draft?.requireResume ?? true}
+                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-700">Resume</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="requireCoverLetter"
+                    defaultChecked={draft?.requireCoverLetter ?? false}
+                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-700">Cover Letter</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="requireTranscript"
+                    defaultChecked={draft?.requireTranscript ?? false}
+                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-700">Transcript</span>
+                </label>
               </div>
             </div>
 

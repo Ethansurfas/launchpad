@@ -10,6 +10,9 @@ interface Applicant {
   id: string;
   status: "PENDING" | "REVIEWING" | "INTERVIEW" | "OFFERED" | "REJECTED" | "WITHDRAWN";
   coverNote: string | null;
+  resumeUrl: string | null;
+  coverLetterUrl: string | null;
+  transcriptUrl: string | null;
   createdAt: string;
   user: {
     id: string;
@@ -214,6 +217,46 @@ export default function ApplicantsContent() {
                           </div>
                         )}
 
+                        {/* Submitted Application Documents */}
+                        {(app.resumeUrl || app.coverLetterUrl || app.transcriptUrl) && (
+                          <div>
+                            <h4 className="text-sm font-medium text-gray-700 mb-2">Submitted Documents</h4>
+                            <div className="flex flex-wrap gap-2">
+                              {app.resumeUrl && (
+                                <a
+                                  href={app.resumeUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 text-sm bg-blue-50 text-blue-700 px-3 py-1 rounded-lg hover:bg-blue-100"
+                                >
+                                  Resume
+                                </a>
+                              )}
+                              {app.coverLetterUrl && (
+                                <a
+                                  href={app.coverLetterUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 text-sm bg-blue-50 text-blue-700 px-3 py-1 rounded-lg hover:bg-blue-100"
+                                >
+                                  Cover Letter
+                                </a>
+                              )}
+                              {app.transcriptUrl && (
+                                <a
+                                  href={app.transcriptUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 text-sm bg-blue-50 text-blue-700 px-3 py-1 rounded-lg hover:bg-blue-100"
+                                >
+                                  Transcript
+                                </a>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Profile Links */}
                         <div className="flex gap-3">
                           {app.user.studentProfile?.resumeUrl && (
                             <a
@@ -222,7 +265,7 @@ export default function ApplicantsContent() {
                               rel="noopener noreferrer"
                               className="text-sm text-blue-600 hover:underline"
                             >
-                              Resume
+                              Profile Resume
                             </a>
                           )}
                           {app.user.studentProfile?.linkedIn && (

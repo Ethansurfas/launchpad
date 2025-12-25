@@ -44,7 +44,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { jobId, coverNote } = await request.json();
+    const { jobId, coverNote, resumeUrl, coverLetterUrl, transcriptUrl } = await request.json();
 
     // Check if already applied
     const existing = await prisma.application.findUnique({
@@ -65,6 +65,9 @@ export async function POST(request: Request) {
         jobId,
         userId: session.user.id,
         coverNote,
+        resumeUrl,
+        coverLetterUrl,
+        transcriptUrl,
       },
       include: {
         job: {
