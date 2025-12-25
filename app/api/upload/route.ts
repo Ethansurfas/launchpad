@@ -20,8 +20,17 @@ export async function POST(request: Request) {
     }
 
     // Validate file type
-    if (file.type !== "application/pdf") {
-      return NextResponse.json({ error: "Only PDF files are allowed" }, { status: 400 });
+    const allowedTypes = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "text/plain",
+    ];
+    if (!allowedTypes.includes(file.type)) {
+      return NextResponse.json({ error: "Allowed formats: PDF, Word, images (JPG, PNG), or text files" }, { status: 400 });
     }
 
     // Validate file size (5MB max)

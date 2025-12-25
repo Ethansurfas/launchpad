@@ -481,10 +481,10 @@ export default function ProfilePage() {
           {activeSection === "documents" ? (
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-900 mb-1">Resume (PDF)</label>
+                <label className="block text-sm font-medium text-gray-900 mb-1">Resume</label>
                 <input
                   type="file"
-                  accept=".pdf"
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp,.txt"
                   onChange={(e) => handleFileUpload(e, "resume")}
                   className="w-full text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-50 file:text-blue-700 file:font-medium hover:file:bg-blue-100"
                   disabled={uploadingFile === "resume"}
@@ -493,10 +493,10 @@ export default function ProfilePage() {
                 {formData.resumeUrl && <p className="text-sm text-green-700 mt-1 font-medium">Resume uploaded</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-900 mb-1">Cover Letter (PDF)</label>
+                <label className="block text-sm font-medium text-gray-900 mb-1">Cover Letter</label>
                 <input
                   type="file"
-                  accept=".pdf"
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp,.txt"
                   onChange={(e) => handleFileUpload(e, "coverLetter")}
                   className="w-full text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-50 file:text-blue-700 file:font-medium hover:file:bg-blue-100"
                   disabled={uploadingFile === "coverLetter"}
@@ -505,10 +505,10 @@ export default function ProfilePage() {
                 {formData.coverLetterUrl && <p className="text-sm text-green-700 mt-1 font-medium">Cover letter uploaded</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-900 mb-1">Transcript (PDF)</label>
+                <label className="block text-sm font-medium text-gray-900 mb-1">Transcript</label>
                 <input
                   type="file"
-                  accept=".pdf"
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp,.txt"
                   onChange={(e) => handleFileUpload(e, "transcript")}
                   className="w-full text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-50 file:text-blue-700 file:font-medium hover:file:bg-blue-100"
                   disabled={uploadingFile === "transcript"}
