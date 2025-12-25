@@ -172,11 +172,14 @@ export default function ProfilePage() {
 
       const data = await res.json();
 
-      if (res.ok) {
+      if (res.ok && data.url) {
         const fieldName = type === "resume" ? "resumeUrl" : type === "coverLetter" ? "coverLetterUrl" : "transcriptUrl";
         setFormData((prev) => ({ ...prev, [fieldName]: data.url }));
         // Auto-save after upload
-        await handleSaveAfterUpload(type, data.url);
+        const saveResult = await handleSaveAfterUpload(type, data.url);
+        if (!saveResult) {
+          setError("File uploaded but failed to save to profile");
+        }
       } else {
         setError(data.error || "Failed to upload file");
       }
@@ -188,7 +191,7 @@ export default function ProfilePage() {
     setUploadingFile(null);
   }
 
-  async function handleSaveAfterUpload(type: string, url: string) {
+  async function handleSaveAfterUpload(type: string, url: string): Promise<boolean> {
     const fieldName = type === "resume" ? "resumeUrl" : type === "coverLetter" ? "coverLetterUrl" : "transcriptUrl";
     const saveData = { ...formData, [fieldName]: url };
 
@@ -199,12 +202,19 @@ export default function ProfilePage() {
         body: JSON.stringify(saveData),
       });
 
+      const data = await res.json();
+
       if (res.ok) {
-        const data = await res.json();
         setProfile(data);
+        return true;
+      } else {
+        console.error("Save failed:", data.error);
+        setError(`Save failed: ${data.error}`);
+        return false;
       }
     } catch (err) {
       console.error("Auto-save error:", err);
+      return false;
     }
   }
 
