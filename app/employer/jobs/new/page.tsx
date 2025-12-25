@@ -68,7 +68,7 @@ export default function NewJobPage() {
                 name="title"
                 type="text"
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                 placeholder="e.g., Software Engineering Intern"
               />
             </div>
@@ -81,7 +81,7 @@ export default function NewJobPage() {
                 name="description"
                 required
                 rows={6}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                 placeholder="Describe the role, responsibilities, and requirements..."
               />
             </div>
@@ -95,7 +95,7 @@ export default function NewJobPage() {
                   name="location"
                   type="text"
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   placeholder="e.g., San Francisco, CA or Remote"
                 />
               </div>
@@ -106,7 +106,7 @@ export default function NewJobPage() {
                 <select
                   name="type"
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                 >
                   <option value="INTERNSHIP">Internship</option>
                   <option value="FULL_TIME">Full-time</option>
@@ -124,7 +124,7 @@ export default function NewJobPage() {
                 <input
                   name="salary"
                   type="text"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   placeholder="e.g., $25/hr or $50k-70k"
                 />
               </div>
@@ -135,7 +135,7 @@ export default function NewJobPage() {
                 <input
                   name="deadline"
                   type="date"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                 />
               </div>
             </div>

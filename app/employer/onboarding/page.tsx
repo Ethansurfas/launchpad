@@ -65,7 +65,7 @@ export default function EmployerOnboardingPage() {
                   name="name"
                   type="text"
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   placeholder="Acme Inc."
                 />
               </div>
@@ -77,7 +77,7 @@ export default function EmployerOnboardingPage() {
                 <input
                   name="website"
                   type="url"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   placeholder="https://example.com"
                 />
               </div>
@@ -89,7 +89,7 @@ export default function EmployerOnboardingPage() {
                 <textarea
                   name="description"
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   placeholder="Tell candidates about your company..."
                 />
               </div>
