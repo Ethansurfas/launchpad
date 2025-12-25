@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
-import DailyIframe from "@daily-co/daily-js";
+import DailyIframe, { DailyCall } from "@daily-co/daily-js";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -36,7 +36,7 @@ export default function InterviewRoomPage() {
   const [joining, setJoining] = useState(false);
   const [inCall, setInCall] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [callFrame, setCallFrame] = useState<DailyIframe | null>(null);
+  const [callFrame, setCallFrame] = useState<DailyCall | null>(null);
 
   useEffect(() => {
     fetchInterview();
