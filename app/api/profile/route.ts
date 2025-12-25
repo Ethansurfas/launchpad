@@ -14,7 +14,16 @@ export async function GET() {
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       include: {
-        studentProfile: true,
+        studentProfile: {
+          include: {
+            experiences: {
+              orderBy: { order: "asc" },
+            },
+            projects: {
+              orderBy: { order: "asc" },
+            },
+          },
+        },
       },
     });
 
@@ -50,32 +59,64 @@ export async function PUT(request: Request) {
       await prisma.studentProfile.upsert({
         where: { userId: session.user.id },
         update: {
+          // Basic Info
+          phone: data.phone,
+          location: data.location,
+          workAuth: data.workAuth,
+          bio: data.bio,
+          // Education
           university: data.university,
           major: data.major,
+          minor: data.minor,
           gradYear: data.gradYear ? parseInt(data.gradYear) : null,
-          bio: data.bio,
-          skills: data.skills || [],
-          resumeUrl: data.resumeUrl,
+          gpa: data.gpa ? parseFloat(data.gpa) : null,
+          coursework: data.coursework || [],
+          honors: data.honors || [],
+          // Links
           linkedIn: data.linkedIn,
           github: data.github,
+          portfolio: data.portfolio,
+          // Documents
+          resumeUrl: data.resumeUrl,
+          coverLetterUrl: data.coverLetterUrl,
+          transcriptUrl: data.transcriptUrl,
+          // Skills
+          skills: data.skills || [],
         },
         create: {
           userId: session.user.id,
+          phone: data.phone,
+          location: data.location,
+          workAuth: data.workAuth,
+          bio: data.bio,
           university: data.university,
           major: data.major,
+          minor: data.minor,
           gradYear: data.gradYear ? parseInt(data.gradYear) : null,
-          bio: data.bio,
-          skills: data.skills || [],
-          resumeUrl: data.resumeUrl,
+          gpa: data.gpa ? parseFloat(data.gpa) : null,
+          coursework: data.coursework || [],
+          honors: data.honors || [],
           linkedIn: data.linkedIn,
           github: data.github,
+          portfolio: data.portfolio,
+          resumeUrl: data.resumeUrl,
+          coverLetterUrl: data.coverLetterUrl,
+          transcriptUrl: data.transcriptUrl,
+          skills: data.skills || [],
         },
       });
     }
 
     const updatedUser = await prisma.user.findUnique({
       where: { id: session.user.id },
-      include: { studentProfile: true },
+      include: {
+        studentProfile: {
+          include: {
+            experiences: { orderBy: { order: "asc" } },
+            projects: { orderBy: { order: "asc" } },
+          },
+        },
+      },
     });
 
     return NextResponse.json(updatedUser);

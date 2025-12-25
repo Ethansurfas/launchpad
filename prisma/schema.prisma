@@ -29,17 +29,77 @@ enum Role {
 }
 
 model StudentProfile {
-  id         String   @id @default(cuid())
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String   @unique
-  university String?
-  major      String?
-  gradYear   Int?
-  resumeUrl  String?
-  bio        String?
-  skills     String[]
-  linkedIn   String?
-  github     String?
+  id        String @id @default(cuid())
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String @unique
+
+  // Basic Info
+  phone         String?
+  location      String?
+  workAuth      WorkAuthorization?
+  bio           String?
+
+  // Education
+  university    String?
+  major         String?
+  minor         String?
+  gradYear      Int?
+  gpa           Float?
+  coursework    String[]
+  honors        String[]
+
+  // Links
+  linkedIn      String?
+  github        String?
+  portfolio     String?
+
+  // Documents (URLs from Supabase Storage)
+  resumeUrl     String?
+  coverLetterUrl String?
+  transcriptUrl String?
+
+  // Skills
+  skills        String[]
+
+  // Related
+  experiences   WorkExperience[]
+  projects      Project[]
+}
+
+enum WorkAuthorization {
+  US_CITIZEN
+  PERMANENT_RESIDENT
+  WORK_VISA
+  STUDENT_VISA
+  REQUIRE_SPONSORSHIP
+  OTHER
+}
+
+model WorkExperience {
+  id          String   @id @default(cuid())
+  profile     StudentProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId   String
+  company     String
+  title       String
+  location    String?
+  startDate   DateTime
+  endDate     DateTime?
+  current     Boolean  @default(false)
+  description String?
+  order       Int      @default(0)
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  profile     StudentProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId   String
+  name        String
+  description String?
+  url         String?
+  technologies String[]
+  startDate   DateTime?
+  endDate     DateTime?
+  order       Int      @default(0)
 }
 
 model Company {
