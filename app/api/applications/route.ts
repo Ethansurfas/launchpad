@@ -25,6 +25,15 @@ export async function GET() {
             },
           },
         },
+        interviews: {
+          select: {
+            id: true,
+            status: true,
+            scheduledAt: true,
+          },
+          orderBy: { createdAt: "desc" },
+          take: 1,
+        },
       },
       orderBy: { createdAt: "desc" },
     });

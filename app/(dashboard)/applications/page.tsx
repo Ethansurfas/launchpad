@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 interface Application {
   id: string;
@@ -21,6 +23,11 @@ interface Application {
       logo: string | null;
     };
   };
+  interviews: {
+    id: string;
+    status: "PENDING_RESPONSE" | "SCHEDULED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
+    scheduledAt: string | null;
+  }[];
 }
 
 const statusConfig = {
@@ -33,6 +40,7 @@ const statusConfig = {
 };
 
 export default function ApplicationsPage() {
+  const router = useRouter();
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -74,12 +82,17 @@ export default function ApplicationsPage() {
         </Card>
       ) : (
         <div className="space-y-4">
-          {applications.map((app) => (
-            <Link key={app.id} href={`/jobs/${app.job.id}`}>
-              <Card className="hover:border-blue-300 transition-colors cursor-pointer">
+          {applications.map((app) => {
+            const latestInterview = app.interviews[0];
+            const canJoinInterview = latestInterview &&
+              (latestInterview.status === "SCHEDULED" || latestInterview.status === "IN_PROGRESS");
+            const needsTimeSelection = latestInterview?.status === "PENDING_RESPONSE";
+
+            return (
+              <Card key={app.id} className="hover:border-blue-300 transition-colors">
                 <CardContent className="py-5">
                   <div className="flex justify-between items-start">
-                    <div className="flex items-center gap-3">
+                    <Link href={`/jobs/${app.job.id}`} className="flex items-center gap-3 flex-1">
                       {app.job.company.logo ? (
                         <img
                           src={app.job.company.logo}
@@ -98,15 +111,52 @@ export default function ApplicationsPage() {
                           Applied {new Date(app.createdAt).toLocaleDateString()}
                         </p>
                       </div>
+                    </Link>
+                    <div className="flex items-center gap-3">
+                      {canJoinInterview && (
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            router.push(`/interviews/${latestInterview.id}`);
+                          }}
+                        >
+                          Join Interview
+                        </Button>
+                      )}
+                      {needsTimeSelection && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            router.push("/interviews");
+                          }}
+                        >
+                          Select Time
+                        </Button>
+                      )}
+                      <Badge variant={statusConfig[app.status].variant}>
+                        {statusConfig[app.status].label}
+                      </Badge>
                     </div>
-                    <Badge variant={statusConfig[app.status].variant}>
-                      {statusConfig[app.status].label}
-                    </Badge>
                   </div>
+                  {latestInterview?.scheduledAt && canJoinInterview && (
+                    <p className="text-sm text-blue-600 mt-2 ml-15">
+                      Interview: {new Date(latestInterview.scheduledAt).toLocaleString("en-US", {
+                        weekday: "short",
+                        month: "short",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                  )}
                 </CardContent>
               </Card>
-            </Link>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
