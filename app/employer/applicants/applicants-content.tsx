@@ -30,6 +30,11 @@ interface Applicant {
     id: string;
     title: string;
   };
+  interviews?: {
+    id: string;
+    status: string;
+    scheduledAt: string | null;
+  }[];
 }
 
 const statusOptions = [
@@ -55,6 +60,13 @@ export default function ApplicantsContent() {
   const [applicants, setApplicants] = useState<Applicant[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  // Interview scheduling state
+  const [schedulingFor, setSchedulingFor] = useState<Applicant | null>(null);
+  const [duration, setDuration] = useState(30);
+  const [timeSlots, setTimeSlots] = useState<string[]>(["", "", ""]);
+  const [scheduling, setScheduling] = useState(false);
+  const [scheduleError, setScheduleError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchApplicants();
@@ -86,6 +98,44 @@ export default function ApplicantsContent() {
         )
       );
     }
+  }
+
+  async function scheduleInterview() {
+    if (!schedulingFor) return;
+
+    const validSlots = timeSlots.filter((slot) => slot);
+    if (validSlots.length < 2) {
+      setScheduleError("Please provide at least 2 time slots");
+      return;
+    }
+
+    setScheduling(true);
+    setScheduleError(null);
+
+    try {
+      const res = await fetch("/api/interviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          applicationId: schedulingFor.id,
+          duration,
+          timeSlots: validSlots.map((slot) => ({ startTime: slot })),
+        }),
+      });
+
+      if (res.ok) {
+        setSchedulingFor(null);
+        setTimeSlots(["", "", ""]);
+        fetchApplicants(); // Refresh to show updated status
+      } else {
+        const data = await res.json();
+        setScheduleError(data.error || "Failed to schedule interview");
+      }
+    } catch {
+      setScheduleError("Failed to schedule interview");
+    }
+
+    setScheduling(false);
   }
 
   if (loading) {
@@ -201,10 +251,17 @@ export default function ApplicantsContent() {
                   </div>
 
                   <div className="flex items-center gap-3">
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => setSchedulingFor(app)}
+                    >
+                      Schedule Interview
+                    </Button>
                     <select
                       value={app.status}
                       onChange={(e) => updateStatus(app.id, e.target.value)}
-                      className="text-sm px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="text-sm px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                     >
                       {statusOptions.map((opt) => (
                         <option key={opt.value} value={opt.value}>
@@ -224,6 +281,87 @@ export default function ApplicantsContent() {
               </CardContent>
             </Card>
           ))}
+        </div>
+      )}
+
+      {/* Schedule Interview Modal */}
+      {schedulingFor && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              Schedule Interview with {schedulingFor.user.name}
+            </h2>
+            <p className="text-sm text-gray-600 mb-4">
+              For: {schedulingFor.job.title}
+            </p>
+
+            {scheduleError && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-lg mb-4 text-sm">
+                {scheduleError}
+              </div>
+            )}
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Duration
+                </label>
+                <select
+                  value={duration}
+                  onChange={(e) => setDuration(Number(e.target.value))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+                >
+                  <option value={30}>30 minutes</option>
+                  <option value={45}>45 minutes</option>
+                  <option value={60}>60 minutes</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Propose Time Slots (at least 2)
+                </label>
+                <p className="text-xs text-gray-500 mb-2">
+                  The candidate will pick one of these times
+                </p>
+                {timeSlots.map((slot, index) => (
+                  <input
+                    key={index}
+                    type="datetime-local"
+                    value={slot}
+                    onChange={(e) => {
+                      const newSlots = [...timeSlots];
+                      newSlots[index] = e.target.value;
+                      setTimeSlots(newSlots);
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white mb-2"
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="flex gap-3 mt-6">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setSchedulingFor(null);
+                  setScheduleError(null);
+                  setTimeSlots(["", "", ""]);
+                }}
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                onClick={scheduleInterview}
+                disabled={scheduling}
+                className="flex-1"
+              >
+                {scheduling ? "Sending..." : "Send Interview Request"}
+              </Button>
+            </div>
+          </div>
         </div>
       )}
     </div>

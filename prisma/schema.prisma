@@ -146,6 +146,8 @@ model Application {
   createdAt DateTime          @default(now())
   updatedAt DateTime          @updatedAt
 
+  interviews Interview[]
+
   @@unique([jobId, userId])
 }
 
@@ -156,4 +158,52 @@ enum ApplicationStatus {
   OFFERED
   REJECTED
   WITHDRAWN
+}
+
+// Interview Scheduling & Video
+model Interview {
+  id            String          @id @default(cuid())
+  application   Application     @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationId String
+  scheduledAt   DateTime?       // Confirmed time (set when candidate picks)
+  duration      Int             @default(30) // minutes: 30, 45, or 60
+  status        InterviewStatus @default(PENDING_RESPONSE)
+  roomName      String?         // Daily.co room name
+  roomUrl       String?         // Daily.co room URL
+  recordingId   String?         // Daily.co recording ID
+  transcription String?         // Transcribed text from recording
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  timeSlots InterviewTimeSlot[]
+  feedback  InterviewFeedback[]
+}
+
+enum InterviewStatus {
+  PENDING_RESPONSE // Waiting for candidate to pick time
+  SCHEDULED        // Time confirmed, waiting for interview
+  IN_PROGRESS      // Interview happening now
+  COMPLETED        // Interview finished
+  CANCELLED        // Cancelled by either party
+}
+
+model InterviewTimeSlot {
+  id          String    @id @default(cuid())
+  interview   Interview @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+  interviewId String
+  startTime   DateTime
+  selected    Boolean   @default(false)
+}
+
+model InterviewFeedback {
+  id              String   @id @default(cuid())
+  interview       Interview @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+  interviewId     String
+  recipientId     String   // User ID who receives this feedback
+  recipientRole   Role     // STUDENT or EMPLOYER
+  clarityScore    Int?     // 1-10
+  pacingScore     Int?     // 1-10
+  engagementScore Int?     // 1-10
+  suggestions     String?  // AI-generated improvement tips
+  createdAt       DateTime @default(now())
 }

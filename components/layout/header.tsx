@@ -14,10 +14,12 @@ export function Header() {
     ? [
         { href: "/employer/jobs", label: "My Jobs" },
         { href: "/employer/applicants", label: "Applicants" },
+        { href: "/employer/interviews", label: "Interviews" },
       ]
     : [
         { href: "/jobs", label: "Find Jobs" },
         { href: "/applications", label: "My Applications" },
+        { href: "/interviews", label: "Interviews" },
         { href: "/profile", label: "Profile" },
       ];
 
