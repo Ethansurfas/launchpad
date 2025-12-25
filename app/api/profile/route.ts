@@ -60,48 +60,48 @@ export async function PUT(request: Request) {
         where: { userId: session.user.id },
         update: {
           // Basic Info
-          phone: data.phone,
-          location: data.location,
-          workAuth: data.workAuth,
-          bio: data.bio,
+          phone: data.phone || null,
+          location: data.location || null,
+          workAuth: data.workAuth || null,
+          bio: data.bio || null,
           // Education
-          university: data.university,
-          major: data.major,
-          minor: data.minor,
+          university: data.university || null,
+          major: data.major || null,
+          minor: data.minor || null,
           gradYear: data.gradYear ? parseInt(data.gradYear) : null,
           gpa: data.gpa ? parseFloat(data.gpa) : null,
           coursework: data.coursework || [],
           honors: data.honors || [],
           // Links
-          linkedIn: data.linkedIn,
-          github: data.github,
-          portfolio: data.portfolio,
+          linkedIn: data.linkedIn || null,
+          github: data.github || null,
+          portfolio: data.portfolio || null,
           // Documents
-          resumeUrl: data.resumeUrl,
-          coverLetterUrl: data.coverLetterUrl,
-          transcriptUrl: data.transcriptUrl,
+          resumeUrl: data.resumeUrl || null,
+          coverLetterUrl: data.coverLetterUrl || null,
+          transcriptUrl: data.transcriptUrl || null,
           // Skills
           skills: data.skills || [],
         },
         create: {
           userId: session.user.id,
-          phone: data.phone,
-          location: data.location,
-          workAuth: data.workAuth,
-          bio: data.bio,
-          university: data.university,
-          major: data.major,
-          minor: data.minor,
+          phone: data.phone || null,
+          location: data.location || null,
+          workAuth: data.workAuth || null,
+          bio: data.bio || null,
+          university: data.university || null,
+          major: data.major || null,
+          minor: data.minor || null,
           gradYear: data.gradYear ? parseInt(data.gradYear) : null,
           gpa: data.gpa ? parseFloat(data.gpa) : null,
           coursework: data.coursework || [],
           honors: data.honors || [],
-          linkedIn: data.linkedIn,
-          github: data.github,
-          portfolio: data.portfolio,
-          resumeUrl: data.resumeUrl,
-          coverLetterUrl: data.coverLetterUrl,
-          transcriptUrl: data.transcriptUrl,
+          linkedIn: data.linkedIn || null,
+          github: data.github || null,
+          portfolio: data.portfolio || null,
+          resumeUrl: data.resumeUrl || null,
+          coverLetterUrl: data.coverLetterUrl || null,
+          transcriptUrl: data.transcriptUrl || null,
           skills: data.skills || [],
         },
       });
@@ -122,6 +122,7 @@ export async function PUT(request: Request) {
     return NextResponse.json(updatedUser);
   } catch (error) {
     console.error("Error updating profile:", error);
-    return NextResponse.json({ error: "Failed to update profile" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: `Failed to update profile: ${message}` }, { status: 500 });
   }
 }
