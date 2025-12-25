@@ -15,6 +15,7 @@ export function Header() {
         { href: "/employer/jobs", label: "My Jobs" },
         { href: "/employer/applicants", label: "Applicants" },
         { href: "/employer/interviews", label: "Interviews" },
+        { href: "/employer/company", label: "Company" },
       ]
     : [
         { href: "/jobs", label: "Find Jobs" },
