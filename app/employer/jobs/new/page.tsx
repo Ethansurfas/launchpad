@@ -19,6 +19,8 @@ export default function NewJobPage() {
     const data = {
       title: formData.get("title"),
       description: formData.get("description"),
+      responsibilities: formData.get("responsibilities") || null,
+      requirements: formData.get("requirements") || null,
       location: formData.get("location"),
       type: formData.get("type"),
       salary: formData.get("salary") || null,
@@ -80,9 +82,33 @@ export default function NewJobPage() {
               <textarea
                 name="description"
                 required
-                rows={6}
+                rows={4}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                placeholder="Describe the role, responsibilities, and requirements..."
+                placeholder="Brief overview of the role..."
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Responsibilities
+              </label>
+              <textarea
+                name="responsibilities"
+                rows={5}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+                placeholder="- Swab the deck daily&#10;- Stand watch for rival vessels&#10;- Assist with treasure acquisition..."
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Requirements
+              </label>
+              <textarea
+                name="requirements"
+                rows={5}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+                placeholder="- Strong swimming skills&#10;- Comfortable with parrots&#10;- 2+ years of sailing experience..."
               />
             </div>
 

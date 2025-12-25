@@ -78,6 +78,8 @@ export async function PUT(
       data: {
         title: data.title,
         description: data.description,
+        responsibilities: data.responsibilities,
+        requirements: data.requirements,
         location: data.location,
         type: data.type,
         salary: data.salary,

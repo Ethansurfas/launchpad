@@ -60,12 +60,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "No company associated" }, { status: 400 });
     }
 
-    const { title, description, location, type, salary, deadline } = await request.json();
+    const { title, description, responsibilities, requirements, location, type, salary, deadline } = await request.json();
 
     const job = await prisma.job.create({
       data: {
         title,
         description,
+        responsibilities,
+        requirements,
         location,
         type,
         salary,

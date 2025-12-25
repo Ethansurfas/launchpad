@@ -113,17 +113,19 @@ model Company {
 }
 
 model Job {
-  id          String    @id @default(cuid())
-  title       String
-  description String
-  location    String
-  type        JobType
-  salary      String?
-  company     Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  companyId   String
-  createdAt   DateTime  @default(now())
-  deadline    DateTime?
-  isActive    Boolean   @default(true)
+  id              String    @id @default(cuid())
+  title           String
+  description     String
+  responsibilities String?
+  requirements    String?
+  location        String
+  type            JobType
+  salary          String?
+  company         Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId       String
+  createdAt       DateTime  @default(now())
+  deadline        DateTime?
+  isActive        Boolean   @default(true)
 
   applications Application[]
 }

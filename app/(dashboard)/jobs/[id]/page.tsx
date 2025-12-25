@@ -11,6 +11,8 @@ interface Job {
   id: string;
   title: string;
   description: string;
+  responsibilities: string | null;
+  requirements: string | null;
   location: string;
   type: "INTERNSHIP" | "FULL_TIME" | "PART_TIME" | "CONTRACT";
   salary: string | null;
@@ -159,6 +161,26 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
             </div>
           </div>
 
+          {/* Responsibilities */}
+          {job.responsibilities && (
+            <div>
+              <h2 className="font-semibold text-gray-900 mb-2">Responsibilities</h2>
+              <div className="prose prose-sm max-w-none text-gray-600 whitespace-pre-wrap">
+                {job.responsibilities}
+              </div>
+            </div>
+          )}
+
+          {/* Requirements */}
+          {job.requirements && (
+            <div>
+              <h2 className="font-semibold text-gray-900 mb-2">Requirements</h2>
+              <div className="prose prose-sm max-w-none text-gray-600 whitespace-pre-wrap">
+                {job.requirements}
+              </div>
+            </div>
+          )}
+
           {/* Company Info */}
           {job.company.description && (
             <div>
@@ -199,7 +221,7 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
                       value={coverNote}
                       onChange={(e) => setCoverNote(e.target.value)}
                       rows={4}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                       placeholder="Tell the employer why you're a great fit..."
                     />
                   </div>
