@@ -465,40 +465,40 @@ export default function ProfilePage() {
           {activeSection === "documents" ? (
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Resume (PDF)</label>
+                <label className="block text-sm font-medium text-gray-900 mb-1">Resume (PDF)</label>
                 <input
                   type="file"
                   accept=".pdf"
                   onChange={(e) => handleFileUpload(e, "resume")}
-                  className="w-full"
+                  className="w-full text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-50 file:text-blue-700 file:font-medium hover:file:bg-blue-100"
                   disabled={uploadingFile === "resume"}
                 />
-                {uploadingFile === "resume" && <p className="text-sm text-gray-500 mt-1">Uploading...</p>}
-                {formData.resumeUrl && <p className="text-sm text-green-600 mt-1">Resume uploaded</p>}
+                {uploadingFile === "resume" && <p className="text-sm text-gray-700 mt-1">Uploading...</p>}
+                {formData.resumeUrl && <p className="text-sm text-green-700 mt-1 font-medium">Resume uploaded</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Cover Letter (PDF)</label>
+                <label className="block text-sm font-medium text-gray-900 mb-1">Cover Letter (PDF)</label>
                 <input
                   type="file"
                   accept=".pdf"
                   onChange={(e) => handleFileUpload(e, "coverLetter")}
-                  className="w-full"
+                  className="w-full text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-50 file:text-blue-700 file:font-medium hover:file:bg-blue-100"
                   disabled={uploadingFile === "coverLetter"}
                 />
-                {uploadingFile === "coverLetter" && <p className="text-sm text-gray-500 mt-1">Uploading...</p>}
-                {formData.coverLetterUrl && <p className="text-sm text-green-600 mt-1">Cover letter uploaded</p>}
+                {uploadingFile === "coverLetter" && <p className="text-sm text-gray-700 mt-1">Uploading...</p>}
+                {formData.coverLetterUrl && <p className="text-sm text-green-700 mt-1 font-medium">Cover letter uploaded</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Transcript (PDF)</label>
+                <label className="block text-sm font-medium text-gray-900 mb-1">Transcript (PDF)</label>
                 <input
                   type="file"
                   accept=".pdf"
                   onChange={(e) => handleFileUpload(e, "transcript")}
-                  className="w-full"
+                  className="w-full text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-50 file:text-blue-700 file:font-medium hover:file:bg-blue-100"
                   disabled={uploadingFile === "transcript"}
                 />
-                {uploadingFile === "transcript" && <p className="text-sm text-gray-500 mt-1">Uploading...</p>}
-                {formData.transcriptUrl && <p className="text-sm text-green-600 mt-1">Transcript uploaded</p>}
+                {uploadingFile === "transcript" && <p className="text-sm text-gray-700 mt-1">Uploading...</p>}
+                {formData.transcriptUrl && <p className="text-sm text-green-700 mt-1 font-medium">Transcript uploaded</p>}
               </div>
               <Button onClick={handleSave} disabled={saving}>{saving ? "Saving..." : "Save"}</Button>
             </div>
@@ -507,7 +507,7 @@ export default function ProfilePage() {
               {p?.resumeUrl ? (
                 <a href={p.resumeUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline block">Resume</a>
               ) : (
-                <p className="text-gray-400">No resume uploaded</p>
+                <p className="text-gray-600">No resume uploaded</p>
               )}
               {p?.coverLetterUrl && (
                 <a href={p.coverLetterUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline block">Cover Letter</a>
