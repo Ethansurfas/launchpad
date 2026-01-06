@@ -8,19 +8,26 @@ export function Header() {
   const { data: session } = useSession();
   const pathname = usePathname();
 
-  const isEmployer = session?.user?.role === "EMPLOYER";
+  const role = session?.user?.role;
 
-  const navItems = isEmployer
+  const navItems = role === "EMPLOYER"
     ? [
         { href: "/employer/jobs", label: "My Jobs" },
         { href: "/employer/applicants", label: "Applicants" },
         { href: "/employer/interviews", label: "Interviews" },
         { href: "/employer/company", label: "Company" },
+        { href: "/employer/reviews", label: "Reviews" },
+      ]
+    : role === "ADMIN"
+    ? [
+        { href: "/admin", label: "Dashboard" },
+        { href: "/admin/reviews", label: "Reviews" },
       ]
     : [
         { href: "/jobs", label: "Find Jobs" },
         { href: "/applications", label: "My Applications" },
         { href: "/interviews", label: "Interviews" },
+        { href: "/reviews", label: "Reviews" },
         { href: "/profile", label: "Profile" },
       ];
 
@@ -29,7 +36,7 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center gap-8">
-            <Link href={session ? (isEmployer ? "/employer/jobs" : "/jobs") : "/"} className="text-xl font-bold text-blue-600">
+            <Link href={session ? (role === "EMPLOYER" ? "/employer/jobs" : role === "ADMIN" ? "/admin" : "/jobs") : "/"} className="text-xl font-bold text-blue-600">
               Launchpad
             </Link>
 

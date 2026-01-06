@@ -27,6 +27,12 @@ export async function GET(request: Request) {
             id: true,
             name: true,
             logo: true,
+            reviews: {
+              select: {
+                overall: true,
+                wasGhosted: true,
+              },
+            },
           },
         },
         _count: {
@@ -36,7 +42,35 @@ export async function GET(request: Request) {
       orderBy: { createdAt: "desc" },
     });
 
-    return NextResponse.json(jobs);
+    // Calculate ratings for each company
+    const jobsWithRatings = jobs.map((job) => {
+      const reviews = job.company.reviews;
+      const reviewCount = reviews.length;
+      let averageRating = null;
+      let ghostingRate = 0;
+
+      if (reviewCount > 0) {
+        const totalRating = reviews.reduce((sum, r) => sum + r.overall, 0);
+        averageRating = Number((totalRating / reviewCount).toFixed(1));
+        const ghostedCount = reviews.filter((r) => r.wasGhosted).length;
+        ghostingRate = Math.round((ghostedCount / reviewCount) * 100);
+      }
+
+      // Remove reviews from response, just return computed values
+      const { reviews: _, ...companyWithoutReviews } = job.company;
+
+      return {
+        ...job,
+        company: {
+          ...companyWithoutReviews,
+          reviewCount,
+          averageRating,
+          ghostingRate,
+        },
+      };
+    });
+
+    return NextResponse.json(jobsWithRatings);
   } catch (error) {
     console.error("Error fetching jobs:", error);
     return NextResponse.json({ error: "Failed to fetch jobs" }, { status: 500 });

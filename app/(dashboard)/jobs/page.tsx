@@ -18,6 +18,9 @@ interface Job {
     id: string;
     name: string;
     logo: string | null;
+    reviewCount: number;
+    averageRating: number | null;
+    ghostingRate: number;
   };
   _count: {
     applications: number;
@@ -122,7 +125,25 @@ export default function JobsPage() {
                         )}
                         <div>
                           <h3 className="font-semibold text-gray-900">{job.title}</h3>
-                          <p className="text-sm text-gray-600">{job.company.name}</p>
+                          <div className="flex items-center gap-2">
+                            <p className="text-sm text-gray-600">{job.company.name}</p>
+                            {job.company.averageRating && (
+                              <span className="flex items-center text-sm">
+                                <span className="text-yellow-500">★</span>
+                                <span className="text-gray-600 ml-0.5">
+                                  {job.company.averageRating}
+                                </span>
+                                <span className="text-gray-400 ml-0.5">
+                                  ({job.company.reviewCount})
+                                </span>
+                              </span>
+                            )}
+                            {job.company.ghostingRate > 25 && (
+                              <Badge variant="error" className="text-xs">
+                                {job.company.ghostingRate}% ghosting
+                              </Badge>
+                            )}
+                          </div>
                         </div>
                       </div>
                       <div className="flex items-center gap-3 mt-3 text-sm text-gray-500">

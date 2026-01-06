@@ -20,6 +20,23 @@ model User {
   applications   Application[]
   company        Company?        @relation(fields: [companyId], references: [id])
   companyId      String?
+
+  // University association (for students and admins)
+  university   University? @relation(fields: [universityId], references: [id])
+  universityId String?
+
+  // Reviews
+  reviews             Review[]
+  careerCenterReviews CareerCenterReview[]
+}
+
+model University {
+  id        String   @id @default(cuid())
+  name      String
+  domain    String   @unique  // e.g. "nyu.edu"
+  createdAt DateTime @default(now())
+
+  users User[]
 }
 
 enum Role {
@@ -110,6 +127,10 @@ model Company {
   description String?
   jobs        Job[]
   employees   User[]
+
+  // Reviews
+  reviews             Review[]
+  careerCenterReviews CareerCenterReview[]
 }
 
 model Job {
@@ -159,6 +180,7 @@ model Application {
   transcriptUrl  String?
 
   interviews Interview[]
+  review     Review?
 
   @@unique([jobId, userId])
 }
@@ -218,4 +240,46 @@ model InterviewFeedback {
   engagementScore Int?     // 1-10
   suggestions     String?  // AI-generated improvement tips
   createdAt       DateTime @default(now())
+}
+
+// Employer Reviews (accountability system)
+model Review {
+  id            String      @id @default(cuid())
+  reviewer      User        @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+  reviewerId    String
+  company       Company     @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId     String
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationId String      @unique  // One review per application
+
+  // Ratings (1-5 scale)
+  responsiveness      Int  // Did they communicate promptly?
+  transparency        Int  // Clear about role, salary, timeline?
+  professionalism     Int  // Respectful and prepared?
+  interviewExperience Int  // Fair process, relevant questions?
+  overall             Int  // Overall impression
+
+  wasGhosted Boolean        // Did they ghost after interview?
+  comment    String?        // Optional text review
+
+  createdAt DateTime @default(now())
+}
+
+model CareerCenterReview {
+  id         String   @id @default(cuid())
+  reviewer   User     @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+  reviewerId String
+  company    Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId  String
+
+  // Ratings (1-5 scale)
+  studentTreatment   Int  // Do they treat students well?
+  feedbackTimeliness Int  // Provide timely responses?
+  hiringSuccess      Int  // Do they actually hire?
+  wouldRecommend     Int  // Recommend to peer institutions?
+
+  comment   String?        // Internal notes
+  createdAt DateTime @default(now())
+
+  @@unique([reviewerId, companyId])  // One review per admin per company
 }
