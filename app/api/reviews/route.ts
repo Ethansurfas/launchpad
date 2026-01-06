@@ -18,16 +18,7 @@ export async function GET() {
         userId: session.user.id,
         interviews: {
           some: {
-            OR: [
-              { status: "COMPLETED" },
-              {
-                // 7 days after interview
-                status: "SCHEDULED",
-                scheduledAt: {
-                  lte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-                },
-              },
-            ],
+            status: "COMPLETED",
           },
         },
       },
@@ -125,7 +116,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Check if interview qualifies for review
+    // Check if interview qualifies for review (must be completed)
     const interview = application.interviews[0];
     if (!interview) {
       return NextResponse.json(
@@ -134,14 +125,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const isCompleted = interview.status === "COMPLETED";
-    const isOldEnough =
-      interview.scheduledAt &&
-      new Date(interview.scheduledAt).getTime() < Date.now() - 7 * 24 * 60 * 60 * 1000;
-
-    if (!isCompleted && !isOldEnough) {
+    if (interview.status !== "COMPLETED") {
       return NextResponse.json(
-        { error: "Interview not eligible for review yet" },
+        { error: "Can only review after completing an interview" },
         { status: 400 }
       );
     }
